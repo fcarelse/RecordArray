@@ -1,0 +1,24 @@
+{
+  "name": "recordarray",
+  "version": "0.0.1",
+  "description": "Array Class Extension for Records",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fcarelse/recordarray.git"
+  },
+  "keywords": [
+    "recordarray",
+    "array",
+    "javascript",
+    "records"
+  ],
+  "author": "Francis Carelse",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fcarelse/recordarray/issues"
+  },
+  "homepage": "https://github.com/fcarelse/recordarray#readme",
+  "devDependencies": {}
+}
