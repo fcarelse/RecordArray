@@ -2,8 +2,10 @@
   "name": "recordarray",
   "version": "0.0.1",
   "description": "Array Class Extension for Records",
-  "main": "index.js",
-  "scripts": {},
+  "main": "src/RecordArray.js",
+  "scripts": {
+    "test": "mocha"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/fcarelse/recordarray.git"
@@ -15,10 +17,13 @@
     "records"
   ],
   "author": "Francis Carelse",
-  "license": "ISC",
+  "license": "",
   "bugs": {
     "url": "https://github.com/fcarelse/recordarray/issues"
   },
   "homepage": "https://github.com/fcarelse/recordarray#readme",
-  "devDependencies": {}
+  "devDependencies": {
+    "babel-eslint": "^10.0.3",
+    "eslint-config-prettier": "^6.5.0"
+  }
 }
