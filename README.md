@@ -2,17 +2,17 @@
 Extension of Javascript Array class with record handling
 
 ## class methods
-
 - compare
 - compareRecords
 
 ### compare
 ### compareRecords
 
-## additional object methods
-
+## object methods
 As this class extends the base Array class it inherits all methods from that class, but may need these alternatives to work with an array of records via their fields.
 
+### Retrieval methods
+#### Record Retrieval
 - findBy
 - findByID
 - findByTag
@@ -20,24 +20,28 @@ As this class extends the base Array class it inherits all methods from that cla
 - findOneByID
 - findOneByTag
 - matchBy
+- unique
+- uniqueBy
+- clone
+- toArray
+  
+#### Field/Index retrieval
+- getName
+- indexBy
+- indexByID
+- indexByTag
+
+### Mutation methods
 - sort
 - sortBy
 - sortASC
 - sortDESC
-- clone
-- toArray
+- extend
+- merge
+
+### CRUD methods
 - create
 - read
 - update
 - delete
 - list
-- getName
-- indexBy
-- indexByID
-- indexByTag
-- unique
-- uniqueBy
-- merge
-
-
-### findBy
