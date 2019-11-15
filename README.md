@@ -1,5 +1,6 @@
 # RecordArray
 Extension of Javascript Array class with record handling
+> **Note:** Further information on https://recordarray.js.ie/
 
 ## class methods
 - compare
