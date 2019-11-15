@@ -1,4 +1,4 @@
-# recordarray
+# RecordArray
 Extension of Javascript Array class with record handling
 
 ## class methods
