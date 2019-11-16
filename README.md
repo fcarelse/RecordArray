@@ -33,7 +33,6 @@ As this class extends the base Array class it inherits all methods from that cla
 - indexByTag
 
 ### Mutation methods
-- sort
 - sortBy
 - sortASC
 - sortDESC

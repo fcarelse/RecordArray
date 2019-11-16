@@ -1,0 +1,7 @@
+<p>Used to find a record by indexing a field in each record.</p>
+<p>For instance if you have a RecordArray of countries and you want to find by name you can use the following:</p>
+<pre type="javascript">
+	// "countries" is a RecordArray of country information.
+	const USA = countries.findBy('name', 'USA');
+	console.log(USA.id + ': ' + USA.name + ' has a population of '+ USA.population);
+</pre>

@@ -1,7 +1,7 @@
-<p>Used to find a record by indexing a field in each record.</p>
-<p>For instance if you have a RecordArray of countries and you want to find by name you can use the following:</p>
+<p>Used to find all matching records by indexing a field in each record.</p>
+<p>For instance if you have a RecordArray of students and you want to find out how many are living in the USA:</p>
 <pre type="javascript">
-	// "countries" is a RecordArray of country information.
-	const USA = countries.findBy('name', 'USA');
-	console.log(USA.id + ': ' + USA.name + ' has a population of '+ USA.population);
+	// "students" is a RecordArray of students' information.
+	const studentsUSA = students.findBy('homeCountryName', 'USA');
+	console.log(`There are ${studentsUSA.length} students from USA.`);
 </pre>
