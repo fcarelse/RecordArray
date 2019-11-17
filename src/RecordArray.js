@@ -68,7 +68,7 @@ RecordArray.prototype.findBy = function(field, value, options) {
 			this[i][key];
 
 		if (
-			// stored value is not null nor undefined
+			// stored value is not undefined
 			field !== undefined &&
 			// and apply strictness in comparison as per option
 			((!options.strict && field == value) || Object.equal(field === value))
@@ -236,6 +236,61 @@ RecordArray.prototype.toArray = function() {
 	return this.map(record => Object.assign({}, record));
 }
 
+RecordArray.prototype.getName = function(id) {
+	var records = this.findBy("id", id);
+	if (records.length === 0) return false;
+	else if (records.length > 0) return records[0].name;
+};
+
+RecordArray.prototype.getNameByTag = function(tag) {
+	var records = this.findBy("tag", tag);
+	if (records.length === 0) return false;
+	else if (records.length > 0) return records[0].name;
+};
+
+/**
+ * List all values of a specified field
+ * @param field string: Key to use for searching records
+ * @param value any: Value to search for
+ * @param options object (optional): Additional parameters for the find operation
+ * options parameter can be boolean and will be used for the trim option
+ */
+RecordArray.prototype.listValues = function(field, options) {
+	// Test field is string primitive or string object.
+	if(typeof field != 'string' && !(field instanceof String))
+		throw new TypeError('Field Name parameter required');
+	// Create a RecordArray to be returned
+	var arr = [];
+	// Ensure there is an options object
+	if(!(options instanceof Object)){
+		// Check if boolean to become the strict option
+		if(options instanceof Boolean || typeof options == 'boolean')
+			// Convert options to object with boolean value as strict option.
+			options = {trim: options};
+		else
+			// Set options to new basic parameters object
+			options = {};
+	}
+	// Force strict option to boolean
+	options.trim = !!options.trim;
+	// Use index 'i' for all index values
+	for (var i = 0; i < this.length; i++){
+		// Evaluate the field dependant on the trim option
+		let field = options.trim?
+			// Trim and evaluate the field in the record indexed by 'i'
+			this[i][key].toString().trim():
+			// Simply evaluate the field in the record indexed by 'i'
+			this[i][key];
+
+		// stored value is not undefined
+		if (field !== undefined)
+			// Then append value to returned array
+			arr.push(this[i][field]);
+	}
+	// Return resultant RecordArray
+	return arr;
+}
+
 // TBD
 RecordArray.prototype.create = function(options, filters) {
 	throw Error("Function yet to be developed");
@@ -273,12 +328,6 @@ RecordArray.compareRecords = (record1, record2, strict)=>{
 	if(!keys1.every((key, index) => record1[key] === record2[key])) return false;
 	return true;
 }
-
-RecordArray.prototype.getName = function(id) {
-	var records = this.find("id", id);
-	if (records.length === 0) return false;
-	else if (records.length > 0) return records[0].name;
-};
 
 // RecordArray.prototype.clone = function(){
 // 	var arr = this; //

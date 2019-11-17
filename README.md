@@ -52,7 +52,7 @@ As this class extends the base Array class it inherits all methods from that cla
 - toArray
 - listValues
 - getName
-- getTag
+- getNameByTag
 - indexBy
 - indexByID
 - indexByTag
