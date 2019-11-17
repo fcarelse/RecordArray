@@ -2,6 +2,29 @@
 Extension of Javascript Array class with record handling
 > **Note:** Further information on https://recordarray.js.ie/
 
+## **Usage:**
+ ```javascript
+const RecordArray = require('recordarray');
+
+const users = RecordArray([
+	{id: 1, name: 'Admin', type: 'admin'},
+	{id: 2, name: 'Bob', type: 'guest'},
+	{id: 3, name: 'Sam', type: 'guest'}
+]);
+
+console.log( 'User with ID 1 = ', users.findOneByID(1).name );
+// Output: "Admin"
+
+console.log( 'Guest Users Reverse Alphabetically = ', users
+	.findBy('type', 'guest')
+	.sortBy('name','DESC')
+	.listValues('name')
+	.join(', ') );
+// Output: "Sam, Bob"
+
+```
+
+
 ## class methods
 - compare
 - compareRecords
@@ -21,13 +44,15 @@ As this class extends the base Array class it inherits all methods from that cla
 - findOneByID
 - findOneByTag
 - matchBy
+- matchByID
+- matchByTag
 - unique
 - uniqueBy
 - clone
 - toArray
-  
-#### Field/Index retrieval
+- listValues
 - getName
+- getTag
 - indexBy
 - indexByID
 - indexByTag

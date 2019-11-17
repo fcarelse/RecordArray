@@ -19,6 +19,7 @@
 	<div ng-include="'layout/navbar.html'"></div>
 	<div class="container">
 		<h3>{{data.page? data.page.name:''}}</h3>
+		<pre>Command: {{data.method}}</pre>
 		<div ng-include="data.page?'methods/'+data.page.tag+'.html' : 'methods/intro.html'"></div>
 	</div>
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

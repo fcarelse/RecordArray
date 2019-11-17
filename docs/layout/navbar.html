@@ -1,15 +1,15 @@
 <navbar class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
 	<h5 class="my-0 mr-md-auto font-weight-normal">
-		<a href="/">{{data.title}}</a></h5>
+		<a href="/">RecordArray</a></h5>
+	<nav class="my-2 my-md-0 mr-md-3">
+		<ul class="nav nav-tabs mb-3">
+			<li class="nav-item dropdown" ng-repeat="section in data.sections">
+				<a class="nav-link dropdown-toggle {{data.section.tag == section.tag? 'active':''}}" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{section.name}}</a>
+				<div class="dropdown-menu">
+					<a class="dropdown-item" ng-click="sys.goto(page, section)"
+					ng-repeat="page in data.pages[section.tag]">{{page.tag}}</a>
+				</div>
+			</li>
+		</ul>
+	</nav>
 </navbar>
-<nav class="my-2 my-md-0 mr-md-3">
-	<ul class="nav nav-tabs mb-3">
-		<li class="nav-item dropdown" ng-repeat="section in data.sections">
-			<a class="nav-link dropdown-toggle {{data.section.tag == section.tag? 'active':''}}" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{section.name}}</a>
-			<div class="dropdown-menu">
-				<a class="dropdown-item" ng-click="sys.goto(page, section)"
-				ng-repeat="page in data.pages[section.tag]">{{page.tag}}</a>
-			</div>
-		</li>
-	</ul>
-</nav>

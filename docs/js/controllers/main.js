@@ -14,7 +14,7 @@ app.controller('Main', ['$rootScope', '$scope', function ($rootScope, $scope) {
 		data.page = page;
 		data.section = section;
 		page.params = page.params || [];
-		data.title = 'RecordArray' + (data.page.type == 'classmethod'?
+		data.method = 'RecordArray' + (data.page.type == 'classmethod'?
 			`.${data.page.tag}(${data.page.params.join(', ')})`:
 			data.page.type == 'method'?
 				`.prototype.${data.page.tag}(${data.page.params.join(', ')})`:
