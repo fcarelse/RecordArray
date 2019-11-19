@@ -14,12 +14,17 @@ app.controller('Main', ['$rootScope', '$scope', function ($rootScope, $scope) {
 		data.page = page;
 		data.section = section;
 		page.params = page.params || [];
-		data.method = 'RecordArray' + (data.page.type == 'classmethod'?
+		data.method = (data.page.tag=='intro'?
+			'const RecordArray = require(\'recordarray\');':
+			data.page.tag=='constructor'?
+				'let recordArray = new RecordArray()':
+				'RecordArray') + (data.page.type == 'classmethod'?
 			`.${data.page.tag}(${data.page.params.join(', ')})`:
 			data.page.type == 'method'?
 				`.prototype.${data.page.tag}(${data.page.params.join(', ')})`:
 				''
-		) + ' - ' + data.page.name;
+		);
+
 	}
 
 	var applyQueued;

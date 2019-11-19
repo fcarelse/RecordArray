@@ -329,14 +329,6 @@ RecordArray.compareRecords = (record1, record2, strict)=>{
 	return true;
 }
 
-// RecordArray.prototype.clone = function(){
-// 	var arr = this; //
-// 	var clone = [];
-// 	for(var i = 0; i < arr.length; i++)
-// 		clone.push( Object.assign({}, arr[i]) );
-// 	return clone;
-// };
-
 // Find the index of a record using it's "id"
 RecordArray.prototype.indexBy = function(field, value, strict) {
 	// Assert field not null
@@ -371,7 +363,7 @@ RecordArray.prototype.unique = function(field, strict) {
 	// Default field to 'id'
 	if (field == null) field = "id";
 	// Compare current index with index of first occurence of record with field with that value)
-	return this.filter((e, i) => this.indexFrom(field, e[field], strict) == i);
+	return this.filter((e, i) => this.indexBy(field, e[field], strict) == i);
 };
 
 RecordArray.prototype.uniqueBy = function(field, strict) {
@@ -380,6 +372,10 @@ RecordArray.prototype.uniqueBy = function(field, strict) {
 		throw new TypeError("Field required");
 	// Compare current index with index of first occurence of record with field with that value)
 	return this.filter((e, i) => this.indexFrom(field, e[field], strict) == i);
+};
+
+RecordArray.protoype.uniqueIDs = function(strict){
+	return this.unique().listValues('id');
 };
 
 RecordArray.prototype.hasRecord = function(record){
@@ -434,25 +430,35 @@ RecordArray.compare = (RA1, RA2, strict, identical) => {
 	if (!(RA2 instanceof Array))
 		throw new TypeError("Parameter 2 must be Array or RecordArray");
 
-	// Default "strict" to true
-	if (strict !== false) strict = true;
+	// Ensure there is an options object
+	if(!(options instanceof Object)){
+		// Check if boolean to become the strict option
+		if(options instanceof Boolean || typeof options == 'boolean')
+			// Convert options to object with boolean value as strict option.
+			options = {strict: options};
+		else
+			// Set options to new basic parameters object
+			options = {};
+	}
+
+	// Force strict option to boolean
+	options.strict = !!options.strict;
+
+	// Force identical option to boolean
+	options.identical = !!options.identical;
 
 	// Compare Lengths of unique IDs.
-	if (strict && RA1.uniqueIDs.length !== RA2.uniqueIDs.length) return false;
+	if (options.strict && RA1.uniqueIDs().length !== RA2.uniqueIDs().length) return false;
 
 	// Compare records
-	if (identical) {
-		if (
-			!RA1.every((record, index) => Records.compare(record, RA2[index], strict))
-		)
-			return false;
+	if (options.identical) {
+		if ( !RA1.every( ( record, index) =>
+			RecordArray.compareRecords(record, RA2[index], options.strict)
+		)) return false;
 	} else {
-		if (
-			!RA1.every(record =>
-				Records.compare(record, RA2.findOne("id", record.id), strict)
-			)
-		);
-		return false;
+		if ( !RA1.every(record =>
+			RecordArray.compareRecords(record, RA2.findOne("id", record.id), options.strict)
+		)) return false;
 	}
 
 	return true;
