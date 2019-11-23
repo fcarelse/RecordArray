@@ -11,8 +11,14 @@ app.controller('Main', ['$rootScope', '$scope', function ($rootScope, $scope) {
 	}
 
 	sys.goto = (page, section) => {
-		data.page = page;
-		data.section = section;
+		data.section = section in data.pages?
+			section:
+			'class';
+		data.page = typeof page == 'string'?
+			data.pages[data.section].reduce(
+				(tag, next)=>tag==page.tag?tag:next,
+				'intro'):
+			page;
 		page.params = page.params || [];
 		data.method = (data.page.tag=='intro'?
 			'const RecordArray = require(\'recordarray\');':
@@ -43,9 +49,9 @@ app.controller('Main', ['$rootScope', '$scope', function ($rootScope, $scope) {
 		{tag: 'class', name: 'Class'},
 		{tag: 'reading', name: 'Reading'},
 		{tag: 'changing', name: 'Changing'},
-		{tag: 'CRUD', name: 'CRUD'},
-		{tag: 'schema', name: 'Schemata'},
-		{tag: 'filter', name: 'Filtering'},
+		{tag: 'CRUD', name: 'CRUD', hide: true},
+		{tag: 'schema', name: 'Schemata', hide: true},
+		{tag: 'filter', name: 'Filtering', hide: true},
 	];
 
 	data.pages = {};
