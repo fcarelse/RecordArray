@@ -19,7 +19,7 @@ angular.element(document).ready(function() {
 });
 
 //Setting HTML5 Location Mode
-angular.module('docs').config(['$locationProvider',
+app.config(['$locationProvider',
 	function($locationProvider) {
 		$locationProvider
 			.hashPrefix('!')
