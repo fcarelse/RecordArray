@@ -5,7 +5,7 @@ var data = {}; // Global data
 var sys = {}; // Global system
 
 // Defining the docs app.
-var app = angular.module('docs', ['ngResource']);
+var app = angular.module('docs', ['ngResource','ngRoute']);
 
 /**
  * When the app is fully loaded
@@ -24,5 +24,21 @@ app.config(['$locationProvider',
 		$locationProvider
 			.hashPrefix('!')
 			.html5Mode(true);
+	}
+]);
+
+app.config(['$routeProvider',
+	function($routeProvider) {
+		$routeProvider
+			.when('/?:section/?:page', {
+				templateUrl: function(params){
+					sys.goto(params.section, params.page);
+					return 'index.html';
+				}
+			})
+
+			.otherwise({
+				redirectTo: '/class/intro'
+			});
 	}
 ]);

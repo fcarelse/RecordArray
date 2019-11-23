@@ -8,6 +8,6 @@
 }
 
 a[ng-click]{
-	color: lightblue;
+	color: blue;
 	text-decoration: underline;
 }

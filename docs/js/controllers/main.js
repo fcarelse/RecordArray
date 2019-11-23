@@ -1,4 +1,4 @@
-app.controller('Main', ['$rootScope', '$scope', function ($rootScope, $scope) {
+app.controller('Main', ['$rootScope', '$scope', '$location', function ($rootScope, $scope, $location) {
 
 	// Passing global objects into angular's base scope.
 	$rootScope.data = data;
@@ -11,14 +11,24 @@ app.controller('Main', ['$rootScope', '$scope', function ($rootScope, $scope) {
 	}
 
 	sys.goto = (page, section) => {
-		data.section = section in data.pages?
-			section:
-			'class';
+		// If section argument is a string then find last match of tag within sections
+		// Otherwise use section argument as the current secion record
+		// Default to first section
+		data.section = typeof section == 'string'?
+			data.sections.reduce(
+				(s, next)=>s.tag==section?s:next,
+				data.sections[0]):
+			section;
+
+		// If page argument is a string then find last match of tag within section
+		// Otherwise use page argument as the current page record
+		// Default to first page in section
 		data.page = typeof page == 'string'?
-			data.pages[data.section].reduce(
+			data.pages[data.section.tag].reduce(
 				(p, next)=>p.tag==page?p:next,
-				data.pages[data.section][0]):
+				data.pages[data.section.tag][0]):
 			page;
+
 		page.params = page.params || [];
 		data.method = (data.page.tag=='intro'?
 			'const RecordArray = require(\'recordarray\');':
@@ -30,7 +40,7 @@ app.controller('Main', ['$rootScope', '$scope', function ($rootScope, $scope) {
 				`.prototype.${data.page.tag}(${data.page.params.join(', ')})`:
 				''
 		);
-
+		$location.path(`/${data.section.tag}/${data.page.tag}`);
 	}
 
 	var applyQueued;
