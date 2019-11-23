@@ -55,6 +55,7 @@ app.controller('Main', ['$rootScope', '$scope', '$location', function ($rootScop
 		}
 	};
 
+	// Section Records
 	data.sections = [
 		{tag: 'class', name: 'Class'},
 		{tag: 'reading', name: 'Reading'},
@@ -79,27 +80,27 @@ app.controller('Main', ['$rootScope', '$scope', '$location', function ($rootScop
 		{tag: 'findBy', name: 'Find By Field', type: 'method',
 			params: ['field', 'value', '[options]']},
 		{tag: 'findByID', name: 'Find By ID', type: 'method',
-			params: ['value', '[options]']},
+			params: ['value', '[options]'], hide: true},
 		{tag: 'findByTag', name: ' Find By Tag', type: 'method',
-			params: ['value', '[options]']},
+			params: ['value', '[options]'], hide: true},
 		{tag: 'findOne', name: 'Find One By Field', type: 'method',
 			params: ['field', 'value', '[options]']},
 		{tag: 'findOneByID', name: 'Find One By ID', type: 'method',
-			params: ['value', '[options]']},
+			params: ['value', '[options]'], hide: true},
 		{tag: 'findOneByTag', name: 'Find One By Tag', type: 'method',
-			params: ['value', '[options]']},
+			params: ['value', '[options]'], hide: true},
 		{tag: 'matchBy', name: 'Match By Field', type: 'method',
 			params: ['field', 'values']},
 		{tag: 'matchByID', name: 'Match By ID', type: 'method',
-			params: ['values']},
+			params: ['values'], hide: true},
 		{tag: 'matchByTag', name: 'Match By Tag', type: 'method',
-			params: ['values']},
+			params: ['values'], hide: true},
 		{tag: 'indexBy', name: 'Index By Field', type: 'method',
 			params: ['field', 'values']},
 		{tag: 'indexByID', name: 'Index By ID', type: 'method',
-			params: ['values']},
+			params: ['values'], hide: true},
 		{tag: 'indexByTag', name: 'Index By Tag', type: 'method',
-			params: ['values']},
+			params: ['values'], hide: true},
 	];
 
 	data.pages.changing = [
