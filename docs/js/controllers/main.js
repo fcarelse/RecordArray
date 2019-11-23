@@ -16,8 +16,8 @@ app.controller('Main', ['$rootScope', '$scope', function ($rootScope, $scope) {
 			'class';
 		data.page = typeof page == 'string'?
 			data.pages[data.section].reduce(
-				(tag, next)=>tag==page.tag?tag:next,
-				'intro'):
+				(p, next)=>p.tag==page?p:next,
+				data.pages[data.section][0]):
 			page;
 		page.params = page.params || [];
 		data.method = (data.page.tag=='intro'?

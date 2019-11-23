@@ -18,3 +18,11 @@ angular.element(document).ready(function() {
 	angular.bootstrap(document, ['docs']);
 });
 
+//Setting HTML5 Location Mode
+angular.module('app').config(['$locationProvider',
+	function($locationProvider) {
+		$locationProvider
+			.hashPrefix('!')
+			.html5Mode(true);
+	}
+]);

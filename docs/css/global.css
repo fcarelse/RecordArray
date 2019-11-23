@@ -6,3 +6,8 @@
 .pointer{
 	cursor: pointer
 }
+
+a[ng-click]{
+	color: lightblue;
+	text-decoration: underline;
+}
