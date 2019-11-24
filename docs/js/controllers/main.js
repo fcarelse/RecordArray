@@ -1,4 +1,4 @@
-app.controller('Main', ['$rootScope', '$scope', '$location', function ($rootScope, $scope, $location) {
+app.controller('Main', ['$rootScope', '$scope', '$location', '$route', function ($rootScope, $scope, $location, $route) {
 
 	// Passing global objects into angular's base scope.
 	$rootScope.data = data;
@@ -10,7 +10,17 @@ app.controller('Main', ['$rootScope', '$scope', '$location', function ($rootScop
 		findByTag: 'Find By Tag',
 	}
 
+	$rootScope.$on('$routeUpdate',function(){
+		console.log('Route update');
+	})
+
 	sys.goto = (page, section) => {
+		// If only 1 string passed then break down like it is a path
+		if(arguments.length == 1){
+			[section, page] = page.match(/\/([^\/]+)\/([^\/]+)/);
+			if(!page) return console.log('Bad path:', arguments[0]);
+		}
+
 		// If section argument is a string then find last match of tag within sections
 		// Otherwise use section argument as the current secion record
 		// Default to first section
@@ -116,6 +126,7 @@ app.controller('Main', ['$rootScope', '$scope', '$location', function ($rootScop
 			params: ['recordArray1', 'recordArray2,...', 'recordArrayN']},
 	];
 
-	sys.goto(data.pages.class[0], data.sections[0])
+	// sys.goto(data.pages.class[0], data.sections[0])
 
+	// $location.path('/class/constructor');
 }]);

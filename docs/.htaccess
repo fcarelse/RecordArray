@@ -4,7 +4,7 @@ RewriteCond %{HTTPS} off
 RewriteCond %{HTTP_HOST} !=localhost [NC]
 RewriteCond %{HTTP_HOST} !=rajsie [NC]
 RewriteCond %{HTTP:X-Forwarded-Proto} !https
-RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R,L,QSA]
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R,L,QSA]
 
 RewriteCond %{REQUEST_URI} /class.* [OR]
 RewriteCond %{REQUEST_URI} /reading.* [OR]
@@ -22,8 +22,8 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 # If the request is not for a valid link
 RewriteCond %{REQUEST_FILENAME} !-l
-RewriteCond %{REQUEST_URI} !^/index.htm
-RewriteCond %{REQUEST_URI} !^/index.*
+#RewriteCond %{REQUEST_URI} =/index.js [OR]
+RewriteCond %{REQUEST_URI} !/index.*
 RewriteCond %{REQUEST_URI} !/class.*
 RewriteCond %{REQUEST_URI} !/reading.*
 RewriteCond %{REQUEST_URI} !/changing.*
@@ -31,4 +31,4 @@ RewriteCond %{REQUEST_URI} !/CRUD.*
 RewriteCond %{REQUEST_URI} !/schema.*
 RewriteCond %{REQUEST_URI} !/filter.*
 RewriteCond %{HTTP_HOST} !=rajsie [NC]
-RewriteRule ^(.*)$ https://fcarelse.github.io/RecordArray%{REQUEST_URI} [L,QSA]
+RewriteRule ^ https://fcarelse.github.io/RecordArray%{REQUEST_URI} [L,QSA]

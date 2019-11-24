@@ -19,21 +19,20 @@ angular.element(document).ready(function() {
 });
 
 //Setting HTML5 Location Mode
-app.config(['$locationProvider',
-	function($locationProvider) {
+app.config(['$locationProvider','$routeProvider',
+	function($locationProvider, $routeProvider) {
 		$locationProvider
 			.hashPrefix('!')
 			.html5Mode(true);
-	}
-]);
 
-app.config(['$routeProvider',
-	function($routeProvider) {
 		$routeProvider
-			.when('/?:section/?:page', {
+			.when('/:section/:page', {
+				controller: 'Main',
 				templateUrl: function(params){
-					sys.goto(params.section, params.page);
-					return 'index.html';
+					console.log('Section:',params.section);
+					console.log('Page:',params.page);
+					sys.goto(params.page, params.section);
+					return 'blank.html';
 				}
 			})
 
