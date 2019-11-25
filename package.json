@@ -1,6 +1,6 @@
 {
   "name": "recordarray",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Array Class Extension for Records",
   "main": "src/RecordArray.js",
   "scripts": {

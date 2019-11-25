@@ -58,25 +58,41 @@ RecordArray.prototype.findBy = function(field, value, options) {
 	if (value === undefined) return arr;
 	// If null or undefined value to search for then enforce strict equality
 	if (value === null) options.strict = true;
-	// Use index 'i' for all index values
-	for (var i = 0; i < this.length; i++){
-		// Evaluate the field dependant on the trim option
-		let field = options.trim?
-			// Trim and evaluate the field in the record indexed by 'i'
-			this[i][key].toString().trim():
-			// Simply evaluate the field in the record indexed by 'i'
-			this[i][key];
+
+	// Go through all records
+	for(let i=0;i<this.length;i++){
+		record = this[i];
+		// Find a matching field
+		field = Object.keys(record).filter(key=>
+			// Check the trim option
+			options.trim?
+				// Compare field with trimmed key
+				key.trim()==field:
+				// Otherwise compare field with key
+				key==field
+		)[0];
 
 		if (
-			// stored value is not undefined
+			// field should not be undefined
 			field !== undefined &&
-			// and apply strictness in comparison as per option
-			((!options.strict && field == value) || Object.equal(field === value))
+			// stored value is not undefined
+			record[field] !== undefined &&
+			// and apply strictness in comparison as per option between stored value and matching value
+			((!options.strict && record[field] == value) || Object.is(record[field], value))
 		// Then append record to return RecordArray
-		) arr.push(Object.assign({},this[i]));
+		){
+			if(options.returnFirst)
+				return record;
+			else
+				arr.push(record);
+		}
 	}
+
 	// Return resultant RecordArray
-	return arr;
+	if(options.returnFirst)
+		return false;
+	else
+		return arr;
 }
 
 RecordArray.prototype.findById = function(value, options) {
@@ -88,25 +104,15 @@ RecordArray.prototype.findByTag = function(value, options) {
 }
 
 RecordArray.prototype.findOne = function(key, value, options) {
-	var arr = this;
-	strict = !!strict;
-	if (value === null) return false;
-	if (value === undefined) return false;
-	for (var i = 0; i < arr.length; i++)
-		if (
-			arr[i][key] &&
-			((!strict && arr[i][key] == value) || arr[i][key] === value)
-		)
-			return arr[i];
-	return false;
+	return this.findBy(key, value, {...options, returnFirst: true});
 }
 
-RecordArray.prototype.findOneById = function(value, strict) {
-	return this.findOne("id", value, strict);
+RecordArray.prototype.findOneById = function(value, options) {
+	return this.findBy('id', value, {...options, returnFirst: true});
 }
 
-RecordArray.prototype.findOneByTag = function(value, strict) {
-	return this.findOne("tag", value, strict);
+RecordArray.prototype.findOneByTag = function(value, options) {
+	return this.findBy('tag', value, {...options, returnFirst: true});
 }
 
 RecordArray.prototype.matchBy = function(key, values){
@@ -374,7 +380,7 @@ RecordArray.prototype.uniqueBy = function(field, strict) {
 	return this.filter((e, i) => this.indexFrom(field, e[field], strict) == i);
 };
 
-RecordArray.protoype.uniqueIDs = function(strict){
+RecordArray.prototype.uniqueIDs = function(strict){
 	return this.unique().listValues('id');
 };
 

@@ -1,5 +1,5 @@
 # RecordArray
-Extension of Javascript Array class with record handling
+Zero Dependency Extension of Javascript Array class with record handling
 > **Note:** Further information on https://recordarray.js.ie/
 
 ## **Usage:**

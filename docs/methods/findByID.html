@@ -1,8 +1,9 @@
 <p>Partial of <a href="/reading/findBy">findBy</a></p>
-<p>Used to find all matching records by indexing a field in each record.</p>
+<p>Used to find one or more matching records by ID.</p>
 <p>For instance if you have a RecordArray of students and you want to find out how many are living in the USA:</p>
 <pre type="javascript">
 	// "students" is a RecordArray of students' information.
 	const students1n2 = students.findByID([1,2]).listValues(name);
 	console.log(`Student 1 and 2 are ${students1n2.join(' & ')}.`);
 </pre>
+<p>It is more likely that you will have a field in a record that is an ID of the record in another RecordArray</p>

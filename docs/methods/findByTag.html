@@ -1,0 +1,8 @@
+<p>Partial of <a href="/reading/findBy">findBy</a></p>
+<p>Used to find all matching records by indexing each record by the tag field.</p>
+<p>For instance if you have a RecordArray of students and you want a count of those living in USA or Canada:</p>
+<pre type="javascript">
+	// "students" is a RecordArray of students' information.
+	const studentsUSA_CA = students.findByTag(['USA','Canada']).listValues(name);
+	console.log(`Number of Students from USA and Canada are ${studentsUSA_CA.listValues('name').length}.`);
+</pre>
