@@ -90,12 +90,14 @@ RecordArray.prototype.findBy = function(field, value, options) {
 
 	// Return resultant RecordArray
 	if(options.returnFirst)
-		return false;
+		return options.def !== undefined?
+			options.def:
+			{};
 	else
 		return arr;
 }
 
-RecordArray.prototype.findById = function(value, options) {
+RecordArray.prototype.findByID = function(value, options) {
 	return this.findBy("id", value, options);
 }
 
@@ -107,7 +109,7 @@ RecordArray.prototype.findOne = function(key, value, options) {
 	return this.findBy(key, value, {...options, returnFirst: true});
 }
 
-RecordArray.prototype.findOneById = function(value, options) {
+RecordArray.prototype.findOneByID = function(value, options) {
 	return this.findBy('id', value, {...options, returnFirst: true});
 }
 

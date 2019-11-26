@@ -59,3 +59,8 @@ typings/
 
 # next.js build output
 .next
+
+
+#Custom
+a.json
+test.js
