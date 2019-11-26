@@ -1,5 +1,5 @@
 # RecordArray
-Zero Dependency Extension of Javascript Array class with record handling
+Zero Dependency Extension of Javascript Array class with record data handling capabilities
 > **Note:** Further information on https://recordarray.js.ie/
 
 ## **Usage:**
@@ -19,7 +19,8 @@ console.log( 'Guest Users Reverse Alphabetically = ', users
 	.findBy('type', 'guest')
 	.sortBy('name','DESC')
 	.listValues('name')
-	.join(', ') );
+	.join(', ')
+);
 // Output: "Sam, Bob"
 
 ```
