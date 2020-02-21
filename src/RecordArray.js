@@ -24,6 +24,12 @@ class RecordArray extends Array{
 	}
 }
 
+RecordArray.prototype.asyncEach = async function(cb){
+	for(let i=0;i<this.length;i++){
+		await cb(this[i], i);
+	}
+};
+
 module.exports = RecordArray;
 // // Extend the Array class via old method.
 // RecordArray.prototype = Object.create(Array.prototype);
@@ -37,13 +43,18 @@ module.exports = RecordArray;
  * options parameter can be boolean and will be used for the strict option
  */
 RecordArray.prototype.findBy = function(field, value, options) {
-	// Test field is string primitive or string object.
-	if(typeof field != 'string' && !(field instanceof String))
-		throw new TypeError('Field Name parameter required');
 	// Create a RecordArray to be returned
 	var arr = new RecordArray();
+
+	// If no parameters then return empty RecordArray.
+	if(arguments.length == 0) return arr;
+
+	// Test field is not string primitive or string object then return.
+	if(typeof field != 'string' && !(field instanceof String))
+		return arr;
+
 	// Ensure there is an options object
-	if(!(options instanceof Object)){
+	if(!(options instanceof Object) || options == null){
 		// Check if boolean to become the strict option
 		if(options instanceof Boolean || typeof options == 'boolean')
 			// Convert options to object with boolean value as strict option.
@@ -52,33 +63,44 @@ RecordArray.prototype.findBy = function(field, value, options) {
 			// Set options to new basic parameters object
 			options = {};
 	}
+
 	// Force strict option to boolean
 	options.strict = !!options.strict;
+
 	// If value not defined then just return the empty array
 	if (value === undefined) return arr;
+
 	// If null or undefined value to search for then enforce strict equality
 	if (value === null) options.strict = true;
 
 	// Go through all records
 	for(let i=0;i<this.length;i++){
 		record = this[i];
+
 		// Find a matching field
 		field = Object.keys(record).filter(key=>
+
 			// Check the trim option
 			options.trim?
+
 				// Compare field with trimmed key
 				key.trim()==field:
+
 				// Otherwise compare field with key
 				key==field
 		)[0];
+
+		const compared = options.trim?
+			record[field].toString().trim():
+			record[field];
 
 		if (
 			// field should not be undefined
 			field !== undefined &&
 			// stored value is not undefined
-			record[field] !== undefined &&
+			compared !== undefined &&
 			// and apply strictness in comparison as per option between stored value and matching value
-			((!options.strict && record[field] == value) || Object.is(record[field], value))
+			((!options.strict && compared == value) || Object.is(compared, value))
 		// Then append record to return RecordArray
 		){
 			if(options.returnFirst)
