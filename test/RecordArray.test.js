@@ -23,21 +23,10 @@ describe('RecordArray', ()=>{
 	});
 
 	describe('findBy()', ()=>{
-		it('should throw exception due to no field given', function() {
-			() => {
-				testRA.findBy();
-			},
-			/^TypeError: Field Name parameter required$/
-
-			// assert.throws(
-			// 	()=>{
-			// 		testRA.findBy();
-			// 	},
-			// 	{
-			// 		name: 'TypeError',
-			// 		message: 'Field Name parameter required'
-			// 	}
-			// );
+		it('Should return empty RecordArray if no parameters supplied', function() {
+			const res = testRA.findBy();
+			assert.ok(res instanceof RecordArray, 'Returned must be RecordArray')
+			assert.ok(res.length == 0, 'Returned must have no length')
 		});
 	});
 
@@ -56,7 +45,7 @@ describe('RecordArray', ()=>{
 
 		it('Should find records using non core field default to no trim', function() {
 			assert.deepEqual(
-				testRA.findBy('key', 'blue', {trim: true}),
+				testRA.findBy('key', 'blue'),
 				new RecordArray([
 					{id: 3, name: 'Cat', key: 'blue'},
 					{id: 9, name: 'Ian', key: 'blue'}
@@ -66,17 +55,20 @@ describe('RecordArray', ()=>{
 		})
 
 		it('Should find records using non core field allowing trim option', function() {
-			assert.deepEqual(
-				testRA.findBy('key', 'blue', {trim: true}),
-				new RecordArray([
-					{id: 3, name: 'Cat', key: 'blue'},
-					{id: 6, name: 'Fred', key: ' blue '},
-					{id: 7, name: 'Greg', key: ' blue'},
-					{id: 8, name: 'Harry', key: 'blue '},
-					{id: 9, name: 'Ian', key: 'blue'}
-				]),
+			const res = testRA.findBy('key', 'blue', {trim: true});
+			const expected = new RecordArray([
+				{id: 3, name: 'Cat', key: 'blue'},
+				{id: 6, name: 'Fred', key: ' blue '},
+				{id: 7, name: 'Greg', key: ' blue'},
+				{id: 8, name: 'Harry', key: 'blue '},
+				{id: 9, name: 'Ian', key: 'blue'}
+			]);
+			console.log(res);
+			console.log(expected);
+			assert.ok( RecordArray.compare(res, expected),
 				'Should find records with trimmed key equal to value'
 			);
+			assert.deepEqual(res, expected);
 		});
 	});
 

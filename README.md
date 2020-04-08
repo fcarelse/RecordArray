@@ -1,6 +1,12 @@
 # RecordArray
 Zero Dependency Extension of Javascript Array class with record data handling capabilities
-> **Note:** Further information on https://recordarray.js.ie/
+> **Note:** Further information on <a href="https://recordarray.js.ie/" target="_blank">recordarray.js.ie</a>
+
+## Installation
+
+```bash
+npm install recordarray
+```
 
 ## **Usage:**
  ```javascript
