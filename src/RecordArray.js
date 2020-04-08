@@ -77,6 +77,19 @@ RecordArray.prototype.findBy = function(field, value, options) {
 	for(let i=0;i<this.length;i++){
 		record = this[i];
 
+		// Find a matching field
+		field = Object.keys(record).filter(key=>
+
+			// Check the trim option
+			options.trim?
+
+				// Compare field with trimmed key
+				key.trim()==field:
+
+				// Otherwise compare field with key
+				key==field
+		)[0];
+
 		const compared = options.trim?
 			record[field].toString().trim():
 			record[field];
@@ -329,7 +342,10 @@ RecordArray.prototype.list = function(options, filters) {
 	throw Error("Function yet to be developed");
 }
 
+<<<<<<< HEAD
 // faulty. Comparing objects at the moment not keys or value.
+=======
+>>>>>>> 28b654453ba193264c27b177cf2469293dcc4be6
 RecordArray.compareRecords = (record1, record2, strict)=>{
 	// Default "strict" to true
 	if(strict !== false) strict = true;
@@ -440,7 +456,11 @@ RecordArray.prototype.merge = function(arr) {
  * @returns: Boolean true if equal
  * @note:
  */
+<<<<<<< HEAD
 RecordArray.compare = (RA1, RA2, options) => {
+=======
+RecordArray.compare = (RA1, RA2, strict, identical) => {
+>>>>>>> 28b654453ba193264c27b177cf2469293dcc4be6
 	// Assert RA1 is an Array
 	if (!(RA1 instanceof Array))
 		throw new TypeError("Parameter 1 must be Array or RecordArray");
