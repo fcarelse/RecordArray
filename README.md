@@ -1,6 +1,7 @@
 # RecordArray
 Zero Dependency Extension of Javascript Array class with record data handling capabilities
 > **Note:** Further information on <a href="https://recordarray.js.ie/" target="_blank">recordarray.js.ie</a>
+> or <a href="https://recordarray.com/" target="_blank">recordarray.com</a>
 
 ## Installation
 
@@ -12,7 +13,7 @@ npm install recordarray
  ```javascript
 const RecordArray = require('recordarray');
 
-const users = RecordArray([
+const users = new RecordArray([
 	{id: 1, name: 'Admin', type: 'admin'},
 	{id: 2, name: 'Bob', type: 'guest'},
 	{id: 3, name: 'Sam', type: 'guest'}
