@@ -9,9 +9,12 @@
 					data-toggle="dropdown" role="button" aria-haspopup="true"
 					aria-expanded="false">{{section.name}}</a>
 				<div class="dropdown-menu">
-					<a class="dropdown-item" ng-click="sys.goto(page, section)"
-					ng-hide="page.hide"
-					ng-repeat="page in data.pages[section.tag]">{{page.tag}}</a>
+					<div ng-repeat="page in data.pages[section.tag]">
+						<hr ng-show="page.divider">
+						<a class="dropdown-item"
+						ng-click="sys.goto(page, section)"
+						ng-hide="page.hide">{{page.tag}}</a>
+					</div>
 				</div>
 			</li>
 		</ul>

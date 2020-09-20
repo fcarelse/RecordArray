@@ -24,6 +24,10 @@ class RecordArray extends Array{
 	}
 }
 
+RecordArray.new = function(array){
+	return new RecordArray(array);
+};
+
 RecordArray.prototype.asyncEach = async function(cb){
 	for(let i=0;i<this.length;i++){
 		await cb(this[i], i);
@@ -342,10 +346,7 @@ RecordArray.prototype.list = function(options, filters) {
 	throw Error("Function yet to be developed");
 }
 
-<<<<<<< HEAD
 // faulty. Comparing objects at the moment not keys or value.
-=======
->>>>>>> 28b654453ba193264c27b177cf2469293dcc4be6
 RecordArray.compareRecords = (record1, record2, strict)=>{
 	// Default "strict" to true
 	if(strict !== false) strict = true;
@@ -456,11 +457,7 @@ RecordArray.prototype.merge = function(arr) {
  * @returns: Boolean true if equal
  * @note:
  */
-<<<<<<< HEAD
 RecordArray.compare = (RA1, RA2, options) => {
-=======
-RecordArray.compare = (RA1, RA2, strict, identical) => {
->>>>>>> 28b654453ba193264c27b177cf2469293dcc4be6
 	// Assert RA1 is an Array
 	if (!(RA1 instanceof Array))
 		throw new TypeError("Parameter 1 must be Array or RecordArray");

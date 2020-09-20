@@ -4,7 +4,8 @@
   "description": "Array Class Extension for Records",
   "main": "src/RecordArray.js",
   "scripts": {
-    "test": "mocha"
+    "test": "npx mocha",
+		"docs":"npx http-server docs"
   },
   "repository": {
     "type": "git",
