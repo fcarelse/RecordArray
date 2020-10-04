@@ -54,8 +54,18 @@ RecordArray.prototype.findBy = function(field, value, options) {
 	if(arguments.length == 0) return arr;
 
 	// Test field is not string primitive or string object then return.
-	if(typeof field != 'string' && !(field instanceof String))
-		return arr;
+	if(typeof field != 'string' && !(field instanceof String)){
+		if(options.returnFirst){
+			return this.findByID(0,options) ||
+				this.findByTag('',options) ||
+				(
+					options.def !== undefined?
+						options.def:
+						{}
+				);
+		} else
+			return arr;
+	}
 
 	// Ensure there is an options object
 	if(!(options instanceof Object) || options == null){
@@ -70,6 +80,9 @@ RecordArray.prototype.findBy = function(field, value, options) {
 
 	// Force strict option to boolean
 	options.strict = !!options.strict;
+
+	// Force strict option to boolean
+	options.nth = options.nth || 1;
 
 	// If value not defined then just return the empty array
 	if (value === undefined) return arr;
@@ -107,7 +120,7 @@ RecordArray.prototype.findBy = function(field, value, options) {
 			((!options.strict && compared == value) || Object.is(compared, value))
 		// Then append record to return RecordArray
 		){
-			if(options.returnFirst)
+			if(options.returnFirst && !--options.nth)
 				return record;
 			else
 				arr.push(record);

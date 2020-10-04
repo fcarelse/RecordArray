@@ -2,9 +2,19 @@ const assert = require('assert');
 const RecordArray = require('../src/RecordArray.js');
 const fs = require('fs'),
 	fsp = fs.promise;
+const genTestData = require('./genTestData.js');
 
 
-const testRA = new RecordArray(JSON.parse(fs.readFileSync(__dirname+'/testdata/names.json')));
+const testRA = new RecordArray(JSON.parse(
+	fs.readFileSync(__dirname+'/testdata/names.json')
+));
+const testRA2 = new RecordArray(JSON.parse(
+	fs.readFileSync(__dirname+'/testdata/namesAndDefault.json')
+));
+const countries = new RecordArray(JSON.parse(
+	fs.readFileSync(__dirname+'/testdata/countries.json')
+));
+
 
 describe('RecordArray', ()=>{
 	describe('Test Data', ()=>{
@@ -42,8 +52,8 @@ describe('RecordArray', ()=>{
 			assert.strictEqual(test[0].id, 5);
 			assert.strictEqual(test[1].id, 10);
 			assert.deepStrictEqual(test, new RecordArray([
-				{id: 5, name: 'Eddie', key: 'red'},
-				{id: 10, name: 'John', key: 'red'}
+				{id: 5, tag: 'eddie', name: 'Eddie', key: 'red'},
+				{id: 10, tag: 'john', name: 'John', key: 'red'}
 			]), 'Failed to find records with key equal to value');
 		})
 
@@ -51,8 +61,8 @@ describe('RecordArray', ()=>{
 			assert.deepStrictEqual(
 				testRA.findBy('key', 'blue'),
 				new RecordArray([
-					{id: 3, name: 'Cat', key: 'blue'},
-					{id: 9, name: 'Ian', key: 'blue'}
+					{id: 3, tag: 'cat', name: 'Cat', key: 'blue'},
+					{id: 9, tag: 'ian', name: 'Ian', key: 'blue'}
 				]),
 				'Failed to find records with trimmed key equal to value'
 			);
@@ -61,11 +71,11 @@ describe('RecordArray', ()=>{
 		it.skip('Should find records using non core field allowing trim option', function() {
 			const res = testRA.findBy('key', 'blue', {trim: true});
 			const expected = new RecordArray([
-				{id: 3, name: 'Cat', key: 'blue'},
-				{id: 6, name: 'Fred', key: ' blue '},
-				{id: 7, name: 'Greg', key: ' blue'},
-				{id: 8, name: 'Harry', key: 'blue '},
-				{id: 9, name: 'Ian', key: 'blue'}
+				{id: 3, tag: 'cat', name: 'Cat', key: 'blue'},
+				{id: 6, tag: 'fred', name: 'Fred', key: ' blue '},
+				{id: 7, tag: 'greg', name: 'Greg', key: ' blue'},
+				{id: 8, tag: 'harry', name: 'Harry', key: 'blue '},
+				{id: 9, tag: 'ian', name: 'Ian', key: 'blue'}
 			]);
 			console.log(res);
 			console.log(expected);
@@ -92,7 +102,7 @@ describe('RecordArray', ()=>{
 			assert.strictEqual(test.length, 1);
 			assert.strictEqual(test[0].id, 5);
 			assert.deepStrictEqual(test, new RecordArray([
-				{id: 5, name: 'Eddie', key: 'red'},
+				{id: 5, tag: 'eddie', name: 'Eddie', key: 'red'},
 			]), 'Failed to find records with ID equal to value parameter');
 		})
 
@@ -100,38 +110,80 @@ describe('RecordArray', ()=>{
 			assert.deepStrictEqual(
 				testRA.findBy('key', 'blue'),
 				new RecordArray([
-					{id: 3, name: 'Cat', key: 'blue'},
-					{id: 9, name: 'Ian', key: 'blue'}
+					{id: 3, tag: 'cat', name: 'Cat', key: 'blue'},
+					{id: 9, tag: 'ian', name: 'Ian', key: 'blue'}
 				]),
 				'Failed to find records with trimmed key equal to value'
 			);
 		})
-
-		it.skip('Should find records using non core field allowing trim option', function() {
-			const res = testRA.findBy('key', 'blue', {trim: true});
-			const expected = new RecordArray([
-				{id: 3, name: 'Cat', key: 'blue'},
-				{id: 6, name: 'Fred', key: ' blue '},
-				{id: 7, name: 'Greg', key: ' blue'},
-				{id: 8, name: 'Harry', key: 'blue '},
-				{id: 9, name: 'Ian', key: 'blue'}
-			]);
-			console.log(res);
-			console.log(expected);
-			assert.ok( RecordArray.compareRecords(res, expected),
-				'Failed to find records with trimmed key equal to value'
-			);
-		});
 	});
 	// FindByID tests end
 
 	// FindByTag tests start
+	describe('findByTag()',()=>{
+		it('Should return empty RecordArray if no parameters supplied',()=>{
+			const res = testRA.findByTag();
+			assert.ok(res instanceof RecordArray, 'Returned must be RecordArray')
+			assert.ok(res.length == 0, 'Returned must have no length')
+		});
+	});
+
+	describe('findByTag(value)', ()=>{
+		it('Should find records using Tag field', ()=>{
+			const test = testRA.findByTag('eddie');
+			assert.ok(test instanceof RecordArray);
+			assert.strictEqual(test.length, 1);
+			assert.strictEqual(test[0].tag, 'eddie');
+			assert.deepStrictEqual(test, new RecordArray([
+				{id: 5, tag: 'eddie', name: 'Eddie', key: 'red'},
+			]), 'Failed to find records with ID equal to value parameter');
+		})
+
+		it('Should find records using non core field default to no trim', function() {
+			assert.deepStrictEqual(
+				testRA.findBy('key', 'blue'),
+				new RecordArray([
+					{id: 3, tag: 'cat', name: 'Cat', key: 'blue'},
+					{id: 9, tag: 'ian', name: 'Ian', key: 'blue'}
+				]),
+				'Failed to find records with trimmed key equal to value'
+			);
+		})
+	});
 	// FindByTag tests end
 
 	// FindOne tests start
-	// FindOne tests end
-
-	// FindOne tests start
+	describe('findOne()',()=>{
+		// Find none.
+		it('find none if no default record',()=>{
+			assert.deepStrictEqual( testRA.findOne() , {} );
+		});
+		// Find default.
+		it('find default record',()=>{
+			assert.deepStrictEqual( testRA2.findOne() , testRA2[0] );
+		});
+	});
+	describe('findOne(field, value)',()=>{
+		// Find first.
+		it('first record matching',()=>{
+			assert.deepStrictEqual( testRA.findOne('key','blue') , testRA[2] );
+		});
+		// Find nth.
+		it('nth record matching',()=>{
+			assert.deepStrictEqual( testRA.findOne('key','blue',{nth:0}) , testRA[2] );
+			assert.deepStrictEqual( testRA.findOne('key','blue',{nth:1}) , testRA[2] );
+			assert.deepStrictEqual( testRA.findOne('key','blue',{nth:2}) , testRA[8] );
+		});
+		// Find nth with trim.
+		it('nth record matching',()=>{
+			assert.deepStrictEqual( testRA.findOne('key','blue',{nth:0,trim:true}) , testRA[2] );
+			assert.deepStrictEqual( testRA.findOne('key','blue',{nth:1,trim:true}) , testRA[2] );
+			assert.deepStrictEqual( testRA.findOne('key','blue',{nth:2,trim:true}) , testRA[5] );
+			assert.deepStrictEqual( testRA.findOne('key','blue',{nth:3,trim:true}) , testRA[6] );
+			assert.deepStrictEqual( testRA.findOne('key','blue',{nth:4,trim:true}) , testRA[7] );
+			assert.deepStrictEqual( testRA.findOne('key','blue',{nth:5,trim:true}) , testRA[8] );
+		});
+	});
 	// FindOne tests end
 
 	// FindOneByID tests start

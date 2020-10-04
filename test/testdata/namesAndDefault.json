@@ -1,5 +1,11 @@
 [
  {
+  "id": 0,
+  "tag": "",
+  "name": "Default",
+  "key": "default"
+ },
+ {
   "id": 1,
   "tag": "adam",
   "name": "Adam",
