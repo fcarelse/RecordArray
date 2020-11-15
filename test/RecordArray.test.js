@@ -2,7 +2,7 @@ const assert = require('assert');
 const RecordArray = require('../src/RecordArray.js');
 const fs = require('fs'),
 	fsp = fs.promise;
-const genTestData = require('./genTestData.js');
+const testData = require('./genTestData.js');
 
 
 const testRA = new RecordArray(JSON.parse(
@@ -169,13 +169,13 @@ describe('RecordArray', ()=>{
 			assert.deepStrictEqual( testRA.findOne('key','blue') , testRA[2] );
 		});
 		// Find nth.
-		it('nth record matching',()=>{
+		it('nth record matching without trim as default option',()=>{
 			assert.deepStrictEqual( testRA.findOne('key','blue',{nth:0}) , testRA[2] );
 			assert.deepStrictEqual( testRA.findOne('key','blue',{nth:1}) , testRA[2] );
 			assert.deepStrictEqual( testRA.findOne('key','blue',{nth:2}) , testRA[8] );
 		});
 		// Find nth with trim.
-		it('nth record matching',()=>{
+		it('nth record matching with trim',()=>{
 			assert.deepStrictEqual( testRA.findOne('key','blue',{nth:0,trim:true}) , testRA[2] );
 			assert.deepStrictEqual( testRA.findOne('key','blue',{nth:1,trim:true}) , testRA[2] );
 			assert.deepStrictEqual( testRA.findOne('key','blue',{nth:2,trim:true}) , testRA[5] );

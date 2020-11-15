@@ -2,7 +2,7 @@
  *
  * @description: An extension of Array that provides record processing related methods
  * @author Francis Carelse
- * @version 0.0.1
+ * @version 0.0.6
  */
 class RecordArray extends Array{
 	/**
