@@ -1,11 +1,11 @@
 {
   "name": "recordarray",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Array Class Extension for Records",
   "main": "src/RecordArray.js",
   "scripts": {
     "test": "npx mocha",
-		"docs":"npx http-server docs"
+    "docs": "npx http-server docs"
   },
   "repository": {
     "type": "git",
