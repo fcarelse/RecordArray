@@ -152,6 +152,8 @@ describe('RecordArray', ()=>{
 	});
 	// FindByTag tests end
 
+	/* FindOne Test Sections */
+
 	// FindOne tests start
 	describe('findOne()',()=>{
 		// Find none.
@@ -187,9 +189,57 @@ describe('RecordArray', ()=>{
 	// FindOne tests end
 
 	// FindOneByID tests start
+	describe('FindOneByID()',()=>{
+		// Find none.
+		it('find none if no default record',()=>{
+			assert.deepStrictEqual( testRA.findOneByID() , {} );
+		});
+		// Find default.
+		it('find default record',()=>{
+			assert.deepStrictEqual( testRA2.findOneByID() , testRA2[0] );
+		});
+	});
+	describe('FindOneByID(field, value)',()=>{
+		// Find first.
+		it('record matching by ID',()=>{
+			assert.deepStrictEqual( testRA.findOneByID(4) , testRA[3] );
+		});
+		// Find nth.
+		it('nth record matching, 0 defaults to 1',()=>{
+			assert.deepStrictEqual( testRA.findOneByID(4,{nth:0}) , testRA[3] );
+			assert.deepStrictEqual( testRA.findOneByID(4,{nth:1}) , testRA[3] );
+		});
+		it('return empty if nth record not matching',()=>{
+			assert.deepStrictEqual( testRA.findOneByID(4,{nth:2}) , {} );
+		});
+	});
 	// FindOneByID tests end
 
 	// FindOneByTag tests start
+	describe('findOneByTag()',()=>{
+		// Find none.
+		it('find none if no default record',()=>{
+			assert.deepStrictEqual( testRA.findOneByTag() , {} );
+		});
+		// Find default.
+		it('find default record',()=>{
+			assert.deepStrictEqual( testRA2.findOneByTag() , testRA2[0] );
+		});
+	});
+	describe('FindOneByTag(field, value)',()=>{
+		// Find first.
+		it('first record matching',()=>{
+			assert.deepStrictEqual( testRA.findOneByTag('eddie') , testRA[4] );
+		});
+		// Find nth.
+		it('nth record matching, 0 defaults to 1',()=>{
+			assert.deepStrictEqual( testRA.findOneByTag('eddie',{nth:0}) , testRA[4] );
+			assert.deepStrictEqual( testRA.findOneByTag('eddie',{nth:1}) , testRA[4] );
+		});
+		it('return empty if nth record not matching',()=>{
+			assert.deepStrictEqual( testRA.findOneByTag('eddie',{nth:2}) , {} );
+		});
+	});
 	// FindOneByTag tests end
 
 

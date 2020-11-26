@@ -4,6 +4,7 @@
  * @author Francis Carelse
  * @version 0.0.6
  */
+
 class RecordArray extends Array{
 	/**
 	 * @constructor
@@ -23,6 +24,15 @@ class RecordArray extends Array{
 		}
 	}
 }
+
+RecordArray.defaultOptions = {};
+Object.freeze(RecordArray.defaultOptions);
+
+RecordArray.defaultRecord = {};
+Object.freeze(RecordArray.defaultRecord);
+
+// If you change this then remember to freeze as it should not change across your application.
+RecordArray.recordClass = Object;
 
 RecordArray.new = function(array){
 	return new RecordArray(array);
@@ -50,8 +60,21 @@ RecordArray.prototype.findBy = function(field, value, options) {
 	// Create a RecordArray to be returned
 	var arr = new RecordArray();
 
+	options = options instanceof Object? options: RecordArray.defaultOptions;
+
 	// If no parameters then return empty RecordArray.
-	if(arguments.length == 0) return arr;
+	if(value === undefined){
+		if(options.returnFirst){
+			return this.findByID(0,options) ||
+				this.findByTag('',options) ||
+				(
+					options.def !== undefined?
+						options.def:
+						RecordArray.defaultRecord
+				);
+		} else
+			return arr;
+	}
 
 	// Test field is not string primitive or string object then return.
 	if(typeof field != 'string' && !(field instanceof String)){
