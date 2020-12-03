@@ -58,13 +58,15 @@ module.exports = RecordArray;
  */
 RecordArray.prototype.findBy = function(field, value, options) {
 	// Create a RecordArray to be returned
-	var arr = new RecordArray();
+	let arr = new RecordArray();
 
 	options = options instanceof Object? options: RecordArray.defaultOptions;
 
 	// If no parameters then return empty RecordArray.
 	if(value === undefined){
-		if(options.returnFirst){
+		if(options.returnIndex)
+			return -1;
+		else if(options.returnFirst){
 			return this.findByID(0,options) ||
 				this.findByTag('',options) ||
 				(
@@ -76,15 +78,19 @@ RecordArray.prototype.findBy = function(field, value, options) {
 			return arr;
 	}
 
+
+
 	// Test field is not string primitive or string object then return.
 	if(typeof field != 'string' && !(field instanceof String)){
-		if(options.returnFirst){
+		if(options.returnIndex)
+			return -1;
+		else if(options.returnFirst){
 			return this.findByID(0,options) ||
 				this.findByTag('',options) ||
 				(
 					options.def !== undefined?
 						options.def:
-						{}
+						RecordArray.defaultRecord
 				);
 		} else
 			return arr;
@@ -143,15 +149,20 @@ RecordArray.prototype.findBy = function(field, value, options) {
 			((!options.strict && compared == value) || Object.is(compared, value))
 		// Then append record to return RecordArray
 		){
-			if(options.returnFirst && !--options.nth)
-				return record;
-			else
-				arr.push(record);
+			if(!--options.nth){
+				if(options.returnIndex)
+					return i;
+				else if(options.returnFirst)
+					return record;
+			}
+			arr.push(record);
 		}
 	}
 
-	// Return resultant RecordArray
-	if(options.returnFirst)
+	// Return resultant RecordArray or unfound return value.
+	if(options.returnIndex)
+		return -1;
+	else if(options.returnFirst)
 		return options.def !== undefined?
 			options.def:
 			{};
@@ -177,6 +188,18 @@ RecordArray.prototype.findOneByID = function(value, options) {
 
 RecordArray.prototype.findOneByTag = function(value, options) {
 	return this.findBy('tag', value, {...options, returnFirst: true});
+}
+
+RecordArray.prototype.indexBy = function(field, value, options) {
+	return this.findBy(field, value, {...options, returnIndex: true});
+}
+
+RecordArray.prototype.indexByID = function(value, options) {
+	return this.indexBy("id", value, options);
+}
+
+RecordArray.prototype.indexByTag = function(value, options) {
+	return this.indexBy("tag", value, options);
 }
 
 RecordArray.prototype.matchBy = function(key, values){
@@ -400,6 +423,9 @@ RecordArray.compareRecords = (record1, record2, strict)=>{
 	return true;
 }
 
+/*
+//// IndexBy function now handled by findBy function with option flag returnIndex
+
 // Find the index of a record using it's "id"
 RecordArray.prototype.indexBy = function(field, value, strict) {
 	// Assert field not null
@@ -429,6 +455,9 @@ RecordArray.prototype.indexByTag = function(tag, strict) {
 	if (tag == null) throw new TypeError("Tag cannot be null or undefined");
 	return RecordArray.prototype.call(this, "tag", tag, strict);
 };
+
+//// IndexBy function now handled by findBy function with option flag returnIndex
+*/
 
 RecordArray.prototype.unique = function(field, strict) {
 	// Default field to 'id'
