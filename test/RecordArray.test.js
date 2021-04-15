@@ -35,7 +35,7 @@ describe('RecordArray', ()=>{
 		});
 	});
 
-	// FindBy tests start
+	// findBy tests start
 	describe('findBy()', ()=>{
 		it('should return empty RecordArray if no parameters supplied', function() {
 			const res = testRA.findBy();
@@ -84,9 +84,9 @@ describe('RecordArray', ()=>{
 			);
 		});
 	});
-	// FindBy tests end
+	// findBy tests end
 
-	// FindByID tests start
+	// findByID tests start
 	describe('findByID()', ()=>{
 		it('Should return empty RecordArray if no parameters supplied', function() {
 			const res = testRA.findByID();
@@ -117,9 +117,9 @@ describe('RecordArray', ()=>{
 			);
 		})
 	});
-	// FindByID tests end
+	// findByID tests end
 
-	// FindByTag tests start
+	// findByTag tests start
 	describe('findByTag()',()=>{
 		it('Should return empty RecordArray if no parameters supplied',()=>{
 			const res = testRA.findByTag();
@@ -150,11 +150,11 @@ describe('RecordArray', ()=>{
 			);
 		})
 	});
-	// FindByTag tests end
+	// findByTag tests end
 
-	/* FindOne Test Sections */
+	/* findOne Test Sections */
 
-	// FindOne tests start
+	// findOne tests start
 	describe('findOne()',()=>{
 		// Find none.
 		it('find none if no default record',()=>{
@@ -186,10 +186,10 @@ describe('RecordArray', ()=>{
 			assert.deepStrictEqual( testRA.findOne('key','blue',{nth:5,trim:true}) , testRA[8] );
 		});
 	});
-	// FindOne tests end
+	// findOne tests end
 
-	// FindOneByID tests start
-	describe('FindOneByID()',()=>{
+	// findOneByID tests start
+	describe('findOneByID()',()=>{
 		// Find none.
 		it('find none if no default record',()=>{
 			assert.deepStrictEqual( testRA.findOneByID() , RecordArray.defaultRecord );
@@ -199,7 +199,7 @@ describe('RecordArray', ()=>{
 			assert.deepStrictEqual( testRA2.findOneByID() , testRA2[0] );
 		});
 	});
-	describe('FindOneByID(field, value)',()=>{
+	describe('findOneByID(field, value)',()=>{
 		// Find first.
 		it('record matching by ID',()=>{
 			assert.deepStrictEqual( testRA.findOneByID(4) , testRA[3] );
@@ -213,9 +213,9 @@ describe('RecordArray', ()=>{
 			assert.deepStrictEqual( testRA.findOneByID(4,{nth:2}) , {} );
 		});
 	});
-	// FindOneByID tests end
+	// findOneByID tests end
 
-	// FindOneByTag tests start
+	// findOneByTag tests start
 	describe('findOneByTag()',()=>{
 		// Find none.
 		it('find none if no default record',()=>{
@@ -226,7 +226,7 @@ describe('RecordArray', ()=>{
 			assert.deepStrictEqual( testRA2.findOneByTag() , testRA2[0] );
 		});
 	});
-	describe('FindOneByTag(field, value)',()=>{
+	describe('findOneByTag(field, value)',()=>{
 		// Find first.
 		it('first record matching',()=>{
 			assert.deepStrictEqual( testRA.findOneByTag('eddie') , testRA[4] );
@@ -240,15 +240,15 @@ describe('RecordArray', ()=>{
 			assert.deepStrictEqual( testRA.findOneByTag('eddie',{nth:2}) , {} );
 		});
 	});
-	// FindOneByTag tests end
+	// findOneByTag tests end
 
-	/* FindOne Test Sections End*/
+	/* findOne Test Sections End*/
 
 
 
-	/* IndexBy Test Sections */
+	/* indexBy Test Sections */
 
-	// IndexBy tests start
+	// indexBy tests start
 	describe('indexBy()',()=>{
 		// Find none.
 		it('find none if no default record',()=>{
@@ -276,16 +276,16 @@ describe('RecordArray', ()=>{
 			assert.deepStrictEqual( testRA.indexBy('key','blue',{nth:5,trim:true}) , 8 );
 		});
 	});
-	// IndexBy tests end
+	// indexBy tests end
 
-	// IndexByID tests start
-	describe('IndexByID()',()=>{
+	// indexByID tests start
+	describe('indexByID()',()=>{
 		// Find none.
 		it('find none if no default record',()=>{
 			assert.deepStrictEqual( testRA.indexByID() , -1 );
 		});
 	});
-	describe('IndexByID(field, value)',()=>{
+	describe('indexByID(field, value)',()=>{
 		// Find first.
 		it('record matching by ID',()=>{
 			assert.deepStrictEqual( testRA.indexByID(4) , 3 );
@@ -299,16 +299,16 @@ describe('RecordArray', ()=>{
 			assert.deepStrictEqual( testRA.indexByID(4,{nth:2}) , -1 );
 		});
 	});
-	// IndexByID tests end
+	// indexByID tests end
 
-	// IndexByTag tests start
+	// indexByTag tests start
 	describe('indexByTag()',()=>{
 		// Find none.
 		it('find none if no default record',()=>{
 			assert.deepStrictEqual( testRA.indexByTag() , -1 );
 		});
 	});
-	describe('IndexByTag(field, value)',()=>{
+	describe('indexByTag(field, value)',()=>{
 		// Find first.
 		it('first record matching',()=>{
 			assert.deepStrictEqual( testRA.indexByTag('eddie') , 4 );
@@ -322,7 +322,7 @@ describe('RecordArray', ()=>{
 			assert.deepStrictEqual( testRA.indexByTag('eddie',{nth:2}) , -1 );
 		});
 	});
-	// IndexByTag tests end
+	// indexByTag tests end
 
 
 });
