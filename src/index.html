@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>RecordArray Demo Page</title>
+	<script src="./RecordArray.js"></script>
+</head>
+<body>
+	<p>
+		<a href="https://RecordArray.com">Documentation (RecordArray.com)</a>
+		<a href="https://RecordArray.js.ie">(RecordArray.js.ie)</a>
+	</p>
+	<div style="width: 400px"><center>
+		<button onclick="render(order = 'ASC')">Ascending</button>
+		<button onclick="render(order = 'DESC')">Descending</button><br>
+
+		<button onclick="render(field = 'id')">ID</button>
+		<button onclick="render(field = 'name')">Name</button>
+		<button onclick="render(field = 'age')">Age</button>
+		<button onclick="render(field = 'score')">Score</button>
+	</center></div>
+	<hr>
+	
+	<div id="demo"></div>
+	<script>
+		const all = [
+			{id: 1, name: 'Bob', age: 18, score: 40},
+			{id: 2, name: 'Adam', age: 17, score: 50},
+			{id: 3, name: 'Steve', age: 19, score: 10},
+			{id: 4, name: 'Mary', age: 20, score: 100},
+		];
+		let list = RecordArray.new(all), order = 'ASC', field = 'name';
+		render();
+
+		function render(){
+			list.sortBy(field, order);
+			document.getElementById('demo').innerHTML=`
+			<div style="width: 400px">
+				<center>
+					Sorting by "${field}" ${order=='ASC'?'ascending':'descending'}
+				</center>
+			</div>
+			<table style="width: 400px" border="1">
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Age</th>
+					<th>Score</th>
+				</tr>
+				${list.map(item=>(`<tr>
+					<td>${item.id}</td>
+					<td>${item.name}</td>
+					<td>${item.age}</td>
+					<td>${item.score}</td>
+				</tr>`)).join('')}
+			</table>`;
+		}
+	</script>
+</body>
+</html>

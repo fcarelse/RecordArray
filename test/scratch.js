@@ -1,0 +1,1 @@
+const RecordArray = require('../src/RecordArray');

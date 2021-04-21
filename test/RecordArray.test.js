@@ -244,8 +244,6 @@ describe('RecordArray', ()=>{
 
 	/* findOne Test Sections End*/
 
-
-
 	/* indexBy Test Sections */
 
 	// indexBy tests start
@@ -324,5 +322,89 @@ describe('RecordArray', ()=>{
 	});
 	// indexByTag tests end
 
+	/* indexBy Test Sections End */
+
+	if(1==2){ // Skipping
+		/* matchBy Test Sections */
+
+		// matchBy tests start
+		describe('matchBy()',()=>{
+			// Find none.
+			it('find none if no default record',()=>{
+				assert.deepStrictEqual( testRA.matchBy() , -1 );
+			});
+		});
+		describe('matchBy(field, value)',()=>{
+			// Find first.
+			it('first record matching',()=>{
+				assert.deepStrictEqual( testRA.matchBy('key','blue') , 2 );
+			});
+			// Find nth.
+			it('nth record matching without trim as default option',()=>{
+				assert.deepStrictEqual( testRA.matchBy('key','blue',{nth:0}) , 2 );
+				assert.deepStrictEqual( testRA.matchBy('key','blue',{nth:1}) , 2 );
+				assert.deepStrictEqual( testRA.matchBy('key','blue',{nth:2}) , 8 );
+			});
+			// Find nth with trim.
+			it('nth record matching with trim',()=>{
+				assert.deepStrictEqual( testRA.matchBy('key','blue',{nth:0,trim:true}) , 2 );
+				assert.deepStrictEqual( testRA.matchBy('key','blue',{nth:1,trim:true}) , 2 );
+				assert.deepStrictEqual( testRA.matchBy('key','blue',{nth:2,trim:true}) , 5 );
+				assert.deepStrictEqual( testRA.matchBy('key','blue',{nth:3,trim:true}) , 6 );
+				assert.deepStrictEqual( testRA.matchBy('key','blue',{nth:4,trim:true}) , 7 );
+				assert.deepStrictEqual( testRA.matchBy('key','blue',{nth:5,trim:true}) , 8 );
+			});
+		});
+		// matchBy tests end
+
+		// matchByID tests start
+		describe('matchByID()',()=>{
+			// Find none.
+			it('find none if no default record',()=>{
+				assert.deepStrictEqual( testRA.matchByID() , -1 );
+			});
+		});
+		describe('matchByID(field, value)',()=>{
+			// Find first.
+			it('record matching by ID',()=>{
+				assert.deepStrictEqual( testRA.matchByID(4) , 3 );
+			});
+			// Find nth.
+			it('nth record matching, 0 defaults to 1',()=>{
+				assert.deepStrictEqual( testRA.matchByID(4,{nth:0}) , 3 );
+				assert.deepStrictEqual( testRA.matchByID(4,{nth:1}) , 3 );
+			});
+			it('return empty if nth record not matching',()=>{
+				assert.deepStrictEqual( testRA.matchByID(4,{nth:2}) , -1 );
+			});
+		});
+		// matchByID tests end
+
+		// matchByTag tests start
+		describe('matchByTag()',()=>{
+			// Find none.
+			it('find none if no default record',()=>{
+				assert.deepStrictEqual( testRA.matchByTag() , -1 );
+			});
+		});
+		describe('matchByTag(field, value)',()=>{
+			// Find first.
+			it('first record matching',()=>{
+				assert.deepStrictEqual( testRA.matchByTag('eddie') , 4 );
+			});
+			// Find nth.
+			it('nth record matching, 0 defaults to 1',()=>{
+				assert.deepStrictEqual( testRA.matchByTag('eddie',{nth:0}) , 4 );
+				assert.deepStrictEqual( testRA.matchByTag('eddie',{nth:1}) , 4 );
+			});
+			it('return empty if nth record not matching',()=>{
+				assert.deepStrictEqual( testRA.matchByTag('eddie',{nth:2}) , -1 );
+			});
+		});
+		// matchByTag tests end
+
+		/* matchBy Test Sections End */
+
+	}; // Skipping End
 
 });
