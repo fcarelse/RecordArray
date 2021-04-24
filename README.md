@@ -9,7 +9,8 @@ Zero Dependency Extension of Javascript Array class with record data handling ca
 npm install recordarray
 ```
 
-```CDN
+## CDN
+```
 https://unpkg.com/recordarray/src/RecordArray.js
 ```
 
