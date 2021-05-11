@@ -27,11 +27,5 @@
 	"bugs": {
 		"url": "https://github.com/fcarelse/recordarray/issues"
 	},
-	"homepage": "https://github.com/fcarelse/recordarray#readme",
-	"devDependencies": {
-		"babel-eslint": "^10.0.3",
-		"eslint": "^6.8.0",
-		"eslint-config-prettier": "^6.5.0",
-		"mocha": "^7.0.1"
-	}
+	"homepage": "https://github.com/fcarelse/recordarray#readme"
 }
