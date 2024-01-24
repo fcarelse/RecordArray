@@ -1,35 +1,32 @@
+const defaultOptions = {};
+Object.freeze(defaultOptions);
+
+const defaultRecord = {};
+Object.freeze(defaultRecord);
+
+
 /** RecordArray
  *
  * @description: An extension of Array that provides record processing related methods
  * @author Francis Carelse
- * @version 0.0.6
+ * @version 0.0.11
  */
 
 class RecordArray extends Array{
 	/**
 	 * @constructor
 	 * @param {Array} array (optional)
+	 * @param {Object} options (optional)
 	 */
-	constructor(array) {
-		// Apply the superclass
+	constructor(array = [], options = defaultOptions) {
 		super();
-
-		// If supplied array parameter is an Array
-		if (array instanceof Array){
-			// Then iterate over each object in it
-			array.forEach(record => {
-				// Push a duplicate of record
-				this.push(Object.assign({}, record));
-			});
-		}
+		if(!(options instanceof Object)) options = defaultOptions;
+		if(options.data instanceof Array) array = options.data;
+		if(options.key) array.map(field=>({[options.key]:field}));
+		if(!(array instanceof Array)) array = [];
+		array.forEach(record => this.push(Object.assign({}, record)));
 	}
 }
-
-RecordArray.defaultOptions = {};
-Object.freeze(RecordArray.defaultOptions);
-
-RecordArray.defaultRecord = {};
-Object.freeze(RecordArray.defaultRecord);
 
 // If you change this then remember to freeze as it should not change across your application.
 RecordArray.recordClass = Object;
