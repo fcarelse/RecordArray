@@ -4,6 +4,7 @@
 	"description": "Array Class Extension for Records",
 	"main": "src/RecordArray.js",
 	"scripts": {
+    "build": "bash -c \"npx tsc src/*.ts --outDir lib --lib es2017 --declaration; exit 0;\"",
 		"prepublish": "cp src/RecordArray.js lib",
 		"test": "npx mocha",
 		"docs": "npx http-server docs",

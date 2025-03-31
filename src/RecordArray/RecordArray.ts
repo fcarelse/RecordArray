@@ -1,9 +1,9 @@
-import { OptionsType } from "./RecordArray.types";
+import { ArrayOfRecords, RecordArrayOptions, RecordKey, RecordSortOrder, RecordType, RecordValue } from "./RecordArray.types";
 
-export const DEFAULT_OPTIONS: OptionsType = {};
+export const DEFAULT_OPTIONS: RecordArrayOptions = {};
 Object.freeze(DEFAULT_OPTIONS);
 
-export const DEFAULT_RECORD = {};
+export const DEFAULT_RECORD: Record<RecordKey,RecordValue> = {};
 Object.freeze(DEFAULT_RECORD);
 
 
@@ -20,7 +20,7 @@ export class RecordArray extends Array{
 	 * @param {Array<Record>} array (optional)
 	 * @param {Object} options (optional)
 	 */
-	constructor(array: Array<Record<string, any>> = [], options: OptionsType = DEFAULT_OPTIONS) {
+	constructor(array: Array<RecordType> = [], options: RecordArrayOptions = DEFAULT_OPTIONS) {
 		super();
 		if(!(options instanceof Object)) options = DEFAULT_OPTIONS;
 		if(options.data instanceof Array) array = options.data;
@@ -28,7 +28,7 @@ export class RecordArray extends Array{
 		array.forEach(record => this.push(Object.assign({}, record)));
 	}
 
-	findBy (field: string, value, options = DEFAULT_OPTIONS) {
+	findBy (field: RecordKey, value: RecordValue, options = DEFAULT_OPTIONS) {
 		// Create a RecordArray to be returned
 		let arr = new RecordArray();
 	
@@ -64,7 +64,7 @@ export class RecordArray extends Array{
 
 		// Go through all records
 		for(let i=0;i<this.length;i++){
-			let record = this[i];
+			let record: RecordType = this[i];
 	
 			// Find a matching field
 			field = Object.keys(record).filter(key=>
@@ -80,7 +80,7 @@ export class RecordArray extends Array{
 			)[0];
 	
 			const compared = options.trim?
-				record[field].toString().trim():
+				String(record[field]).trim():
 				record[field];
 	
 			if(
@@ -121,77 +121,68 @@ export class RecordArray extends Array{
 		}
 	};
 
-	findByID(value, options: OptionsType = DEFAULT_OPTIONS) {
+	findByID(value: RecordValue, options: RecordArrayOptions = DEFAULT_OPTIONS) {
 		return this.findBy("id", value, options);
 	}
 	
-	findByTag(value, options: OptionsType = DEFAULT_OPTIONS) {
+	findByTag(value: RecordValue, options: RecordArrayOptions = DEFAULT_OPTIONS) {
 		return this.findBy("tag", value, options);
 	}
 
-	findOne(key, value, options: OptionsType = DEFAULT_OPTIONS) {
+	findOne(key: RecordKey, value: RecordValue, options: RecordArrayOptions = DEFAULT_OPTIONS) {
 		return this.findBy(key, value, {...options, returnFirst: true});
 	}
 	
-	findOneByID(value, options: OptionsType = DEFAULT_OPTIONS) {
+	findOneByID(value: RecordValue, options: RecordArrayOptions = DEFAULT_OPTIONS) {
 		return this.findBy('id', value, {...options, returnFirst: true});
 	}
 	
-	findOneByTag(value, options: OptionsType = DEFAULT_OPTIONS) {
+	findOneByTag(value: RecordValue, options: RecordArrayOptions = DEFAULT_OPTIONS) {
 		return this.findBy('tag', value, {...options, returnFirst: true});
 	}
 	
-	indexBy(field, value, options: OptionsType = DEFAULT_OPTIONS) {
+	indexBy(field: RecordKey, value: RecordValue, options: RecordArrayOptions = DEFAULT_OPTIONS) {
 		return this.findBy(field, value, {...options, returnIndex: true});
 	}
 	
-	indexByID(value, options: OptionsType = DEFAULT_OPTIONS) {
+	indexByID(value: RecordValue, options: RecordArrayOptions = DEFAULT_OPTIONS) {
 		return this.indexBy("id", value, options);
 	}
 	
-	indexByTag(value, options: OptionsType = DEFAULT_OPTIONS) {
+	indexByTag(value: RecordValue, options: RecordArrayOptions = DEFAULT_OPTIONS) {
 		return this.indexBy("tag", value, options);
 	}
 	
-	matchBy(key, values){
+	matchBy(key: RecordKey, values: Array<RecordValue>){
 		var arr = new RecordArray();
 		// Undefined values means no matches.
 		if(values === undefined) return arr;
 		// ensure values is an array. Insert into new array and assign if need be.
 		if(!(values instanceof Array)) values = [values];
 		// flatten values array;
-		values = [].concat(values);
+		values = [...values];
 		for(var i = 0; i < values.length; i++)
 			arr[i] = this.findOne(key, values[i]);
 		return arr;
 	}
 	
-	sortBy(field, order) {
+	sortBy(field: RecordKey, order: RecordSortOrder = 'ASC') {
 		// Assert field parameter is a string.
 		if (typeof field !== "string")
 			throw new TypeError("String expected for first parameter.");
 		// Assert order parameter is ASC or DESC
 		if (
-			typeof order !== "string" ||
-			!(order.toLowerCase() === "asc" || order.toLowerCase() === "desc")
+			!['ASC','DESC'].includes(order)
 		)
 			throw new TypeError(
-				"'ASC' or 'DESC' String expected for second parameter."
+				"'ASC' or 'DESC' expected for second parameter."
 			);
 		// Return sorted using appropriate function
-		return this.sort(order.toLowerCase() == "asc" ? sortFnASC : sortFnDESC);
+		return this.sort(order.toUpperCase() == 'ASC' ? sortFnASC : sortFnDESC);
 		// Sorting Ascending Strategy
 		function sortFnASC(a, b) {
-			var c =
-				// Evaluate to 0 f equal
-				a[field] == b[field]?
-					0:
-					// 1 indicates wrong order. -1 indicates correct order
-					a[field] > b[field]?
-						1:
-						-1;
-			// This does not work if you do not assign to a variable before returning.
-			return c;
+			return a[field] == b[field]?
+			0: ( a[field] > b[field]? 1: -1 );
 		}
 		// Sorting Descending Strategy (just reverse the testing parameters)
 		function sortFnDESC(a, b) {
@@ -301,7 +292,7 @@ export class RecordArray extends Array{
 	listValues(field: string = 'id') {
 		// Test field is string primitive or string object.
 		// Create a RecordArray to be returned
-		var arr: Array<any> = [];
+		var arr: Array<RecordValue> = [];
 		// Use index 'i' for all index values
 		for (let i = 0; i < this.length; i++){
 			// stored value is not undefined
