@@ -19,7 +19,7 @@ class RecordArray extends Array{
 			// Then iterate over each object in it
 			array.forEach(record => {
 				// Push a duplicate of record
-				this.push(Object.assign({}, record));
+				this.push({...record});
 			});
 		}
 	}

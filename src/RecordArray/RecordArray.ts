@@ -14,7 +14,7 @@ Object.freeze(DEFAULT_RECORD);
  * @version 0.0.11
  */
 
-export class RecordArray extends Array{
+export default class RecordArray extends Array{
 	/**
 	 * @constructor
 	 * @param {Array<Record>} array (optional)
@@ -28,11 +28,17 @@ export class RecordArray extends Array{
 		array.forEach(record => this.push(Object.assign({}, record)));
 	}
 
-	findBy (field: RecordKey, value: RecordValue, options = DEFAULT_OPTIONS) {
+	static new(array: Array<RecordType> = [], options: RecordArrayOptions = DEFAULT_OPTIONS){
+		return new RecordArray(array, options);
+	}
+
+	findBy(field: RecordKey, value: RecordValue, options = DEFAULT_OPTIONS): any {
 		// Create a RecordArray to be returned
 		let arr = new RecordArray();
 	
-		options = options instanceof Object? options: DEFAULT_OPTIONS;
+		options = options instanceof Object?
+			Object.assign({}, DEFAULT_OPTIONS, options):
+			DEFAULT_OPTIONS;
 	
 		// If no parameters then return empty RecordArray.
 		if(value === undefined){
@@ -46,16 +52,14 @@ export class RecordArray extends Array{
 							options.def:
 							DEFAULT_RECORD
 					);
-			} else
-				return arr;
+			}
+			// If value not defined then just return the empty array
+			return arr;
 		}
 	
 		// Force strict option to boolean
 		options.strict = !!options.strict;
-	
-		// If value not defined then just return the empty array
-		if (value === undefined) return arr;
-	
+
 		// If null or undefined value to search for then enforce strict equality
 		if (value === null) options.strict = true;
 
@@ -125,7 +129,7 @@ export class RecordArray extends Array{
 		return this.findBy("id", value, options);
 	}
 	
-	findByTag(value: RecordValue, options: RecordArrayOptions = DEFAULT_OPTIONS) {
+	public findByTag(value: RecordValue, options: RecordArrayOptions = DEFAULT_OPTIONS) {
 		return this.findBy("tag", value, options);
 	}
 

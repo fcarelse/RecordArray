@@ -1,12 +1,19 @@
 {
 	"name": "recordarray",
-	"version": "0.0.11",
+	"version": "0.0.12",
 	"description": "Array Class Extension for Records",
 	"main": "src/RecordArray.js",
 	"scripts": {
-    "build": "bash -c \"npx tsc src/*.ts --outDir lib --lib es2017 --declaration; exit 0;\"",
+		"build": "bash -c \"npm run build:mjs; npm run build:cjs\"",
+		"build:mjs": "bash -c \"npx tsc src/RecordArray/*.ts --outDir lib --lib es2022 --target es2022 --moduleResolution nodenext --module NodeNext --declaration; exit 0;\"",
+		"build:cjs": "bash -c \"npx tsc src/RecordArray/*.ts --outDir lib/cjs --lib es2022 --target es5 --declaration; exit 0;\"",
+		"postbuild:cjs": "bash -c \"cp src/RecordArray.js lib/cjs/. \"",
 		"prepublish": "cp src/RecordArray.js lib",
-		"test": "npx mocha",
+		"pretest": "npm run build",
+		"test": "bash -c \"npm run test:mocha\"",
+		"test:jest:module": "node --experimental-vm-modules node_modules/.bin/jest",
+		"test:jest": "npx jest --verbose false --silent false test/RecordArray.jest.test.js",
+		"test:mocha": "npx mocha test/RecordArray.mocha.test.js",
 		"docs": "npx http-server docs",
 		"demo": "npx http-server src"
 	},
@@ -28,5 +35,13 @@
 	"bugs": {
 		"url": "https://github.com/fcarelse/recordarray/issues"
 	},
-	"homepage": "https://github.com/fcarelse/recordarray#readme"
+	"homepage": "https://github.com/fcarelse/recordarray#readme",
+	"devDependencies": {
+		"@types/jest": "^29.5.14",
+		"@types/node": "^22.15.21",
+		"jest": "^29.7.0",
+		"ts-jest": "^29.3.4",
+		"typescript": "^5.8.3",
+		"undici-types": "^7.10.0"
+	}
 }
