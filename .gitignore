@@ -2,6 +2,10 @@
 *.code-workspace
 .env
 
+# Build folders
+lib
+build
+
 # Logs
 logs
 *.log
