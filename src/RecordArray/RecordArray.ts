@@ -1,11 +1,8 @@
+import { compare } from "./methods/compare";
+import { DEFAULT_OPTIONS } from "./RecordArray.consts";
 import { ArrayOfRecords, RecordArrayOptions, RecordKey, RecordSortOrder, RecordType, RecordValue } from "./RecordArray.types";
-
-export const DEFAULT_OPTIONS: RecordArrayOptions = {};
-Object.freeze(DEFAULT_OPTIONS);
-
-export const DEFAULT_RECORD: Record<RecordKey,RecordValue> = {};
-Object.freeze(DEFAULT_RECORD);
-
+import { sortASC, sortBy, sortDESC } from "./methods/sorting";
+import { findBy } from "./methods/findBy";
 
 /** RecordArray
  *
@@ -14,7 +11,7 @@ Object.freeze(DEFAULT_RECORD);
  * @version 0.0.11
  */
 
-export default class RecordArray extends Array{
+export class RecordArray extends Array{
 	/**
 	 * @constructor
 	 * @param {Array<Record>} array (optional)
@@ -33,93 +30,14 @@ export default class RecordArray extends Array{
 	}
 
 	findBy(field: RecordKey, value: RecordValue, options = DEFAULT_OPTIONS): any {
-		// Create a RecordArray to be returned
-		let arr = new RecordArray();
-	
-		options = options instanceof Object?
-			Object.assign({}, DEFAULT_OPTIONS, options):
-			DEFAULT_OPTIONS;
-	
-		// If no parameters then return empty RecordArray.
-		if(value === undefined){
-			if(options.returnIndex)
-				return -1;
-			else if(options.returnFirst){
-				return this.findByID(0,options) ||
-					this.findByTag('',options) ||
-					(
-						options.def !== undefined?
-							options.def:
-							DEFAULT_RECORD
-					);
-			}
-			// If value not defined then just return the empty array
-			return arr;
-		}
-	
-		// Force strict option to boolean
-		options.strict = !!options.strict;
-
-		// If null or undefined value to search for then enforce strict equality
-		if (value === null) options.strict = true;
-
-		// set which result to return;
-		let nth = options.nth || 1;
-
-		// Go through all records
-		for(let i=0;i<this.length;i++){
-			let record: RecordType = this[i];
-	
-			// Find a matching field
-			field = Object.keys(record).filter(key=>
-	
-				// Check the trim option
-				options.trim?
-	
-					// Compare field with trimmed key
-					key.trim()==field:
-	
-					// Otherwise compare field with key
-					key==field
-			)[0];
-	
-			const compared = options.trim?
-				String(record[field]).trim():
-				record[field];
-	
-			if(
-				// field should not be undefined
-				field !== undefined &&
-				// stored value is not undefined
-				compared !== undefined &&
-				// and apply strictness in comparison as per option between stored value and matching value
-				((!options.strict && compared == value) || Object.is(compared, value))
-			// Then append record to return RecordArray
-			){
-				if(!--nth || options.returnFirst){
-					if(options.returnIndex) return i;
-					else return record;
-				}
-				arr.push(record);
-			}
-		}
-	
-		// Return resultant RecordArray or unfound return value.
-		if(options.returnIndex)
-			return -1;
-		else if(options.returnFirst)
-			return options.def !== undefined?
-				options.def:
-				{};
-		else
-			return arr;
+		return findBy(this, field, value, options);
 	}
 
-	new(array){
+	new(array: ArrayOfRecords){
 		return new RecordArray(array);
 	};
 	
-	async asyncEach(cb){
+	async asyncEach(cb: Function){
 		for(let i=0;i<this.length;i++){
 			await cb(this[i], i);
 		}
@@ -171,94 +89,22 @@ export default class RecordArray extends Array{
 	}
 	
 	sortBy(field: RecordKey, order: RecordSortOrder = 'ASC') {
-		// Assert field parameter is a string.
-		if (typeof field !== "string")
-			throw new TypeError("String expected for first parameter.");
-		// Assert order parameter is ASC or DESC
-		if (
-			!['ASC','DESC'].includes(order)
-		)
-			throw new TypeError(
-				"'ASC' or 'DESC' expected for second parameter."
-			);
-		// Return sorted using appropriate function
-		return this.sort(order.toUpperCase() == 'ASC' ? sortFnASC : sortFnDESC);
-		// Sorting Ascending Strategy
-		function sortFnASC(a, b) {
-			return a[field] == b[field]?
-			0: ( a[field] > b[field]? 1: -1 );
-		}
-		// Sorting Descending Strategy (just reverse the testing parameters)
-		function sortFnDESC(a, b) {
-			return sortFnASC(b, a);
-		}
+		return sortBy(this, field, order);
 	}
 	
-	/**
-	 * Sort this RecordArray by a set of fields in ascending order
-	 * Takes an array of strings or a space separated string of fieldnames
-	 * @param {Array<String> | String} fields
-	 */
-	sortASC(fields) {
-		// If fields parameter is not already an Array
-		if (!(fields instanceof Array))
-			// Ensure is string and split space separated fieldnames
-			fields = fields.toString().split(" ");
-		// Throw out any non string fields
-		fields = fields.filter(f => typeof f === "string");
-		// If no fields left then abort
-		if (!fields.length)
-			throw new TypeError(
-				'Parameter "fields" needs to be an array of strings or space separated list of field names'
-			);
-		// Return sort using item pair evaluation strategy
-		return this.sort(function(a, b) {
-			// Iterate over fields list
-			for (var i = 0; i < fields.length; i++)
-				// Sequentially check for the first instance of inequality
-				if (a[fields[i]] != b[fields[i]])
-					// If wrong order then pass back 1 otherwise -1
-					return a[fields[i]] > b[fields[i]] ? 1 : -1;
-			// All fields are equal so return 0 for matching
-			return 0;
-		});
+	sortASC(fields: Array<string> | string) {
+		return sortASC(this, fields);
 	}
 	
-	/**
-	 * Sort this RecordArray by a set of fields in descending order
-	 * Takes an array of strings or a space separated string of fieldnames
-	 * @param {Array<String> | String} fields
-	 */
-	sortDESC(fields) {
-		// If fields parameter is not already an Array
-		if (!(fields instanceof Array))
-			// Ensure is string and split space separated fieldnames
-			fields = fields.toString().split(" ");
-		// Throw out any non string fields
-		fields = fields.filter(f => typeof f === "string");
-		// If no fields left then abort
-		if (!fields.length)
-			throw new TypeError(
-				'Parameter "fields" needs to be an array of strings or space separated list of field names'
-			);
-		// Return sort using item pair evaluation strategy
-		return this.sort(function(a, b) {
-			// Iterate over fields list
-			for (var i = 0; i < fields.length; i++)
-				// Sequentially check for the first instance of inequality
-				if (a[fields[i]] != b[fields[i]])
-					// If wrong order then pass back 1 otherwise -1
-					return a[fields[i]] < b[fields[i]] ? 1 : -1;
-			// All fields are equal so return 0 for matching;
-			return 0;
-		});
+	sortDESC(fields: Array<string> | string) {
+		return sortDESC(this, fields)
 	}
-	
+
 	/**
-	 * Clone this RecordArray or supplied Array of reords to a new RecordArray
+	 * Clone this RecordArray or supplied Array of records to a new RecordArray
 	 * @param {Array} arr
 	 */
-	clone(arr) {
+	clone(arr: RecordArray | ArrayOfRecords) {
 		// If no source array supplied then use this one
 		arr = arr || this;
 		// Create new RecordArray
@@ -275,13 +121,13 @@ export default class RecordArray extends Array{
 		return this.map(record => Object.assign({}, record));
 	}
 	
-	getName(id) {
+	getName(id: number | string) {
 		var records = this.findBy("id", id);
 		if (records.length === 0) return false;
 		else if (records.length > 0) return records[0].name;
 	};
 	
-	getNameByTag(tag) {
+	getNameByTag(tag: string) {
 		var records = this.findBy("tag", tag);
 		if (records.length === 0) return false;
 		else if (records.length > 0) return records[0].name;
@@ -334,7 +180,7 @@ export default class RecordArray extends Array{
 	}
 	
 	// faulty. Comparing objects at the moment not keys or value.
-	static compareRecords(record1, record2, strict){
+	static compareRecords(record1: RecordType, record2: RecordType, strict: Boolean = true){
 		// Default "strict" to true
 		if(strict !== false) strict = true;
 	
@@ -366,11 +212,11 @@ export default class RecordArray extends Array{
 		return this.filter((record, i) => this.indexBy(field, record[field], {strict}) == i);
 	};
 	
-	uniqueIDs(strict){
+	uniqueIDs(strict: boolean = true){
 		return this.unique('id', strict).listValues('id');
 	};
 	
-	hasRecord(record){
+	hasRecord(record: RecordType){
 		if(!!record.id)
 			return !!this.findOneByID(record.id);
 		else if(!!record.tag)
@@ -382,8 +228,8 @@ export default class RecordArray extends Array{
 	/**
 	 * Extend the RecordArray array by updating or creating based on matching ID
 	 */
-	extend(arr) {
-		arr.forEach(record=>{
+	extend(arr: RecordArray | ArrayOfRecords) {
+		arr.forEach((record: RecordType)=>{
 			if(this.hasRecord(record)) this.update(record);
 			else this.push(record);
 		});
@@ -399,63 +245,14 @@ export default class RecordArray extends Array{
 		, 0);
 	}
 	
-	merge(arr) {
+	merge(arr: Array<any>) {
 		arr.forEach(r=>this.push(r));
 		return this;
 	};
-	
-	/*
-	 * @description: Comparing 2 RecordArrays
-	 * @author: Francis Carelse
-	 * @param RA1: RecordArray
-	 * @param RA2: RecordArray
-	 * @param strict: Boolean will enforce second RecordArray only has the same records
-	 * @param identical: Boolean will enforce each record by index is compared
-	 * @returns: Boolean true if equal
-	 * @note:
-	 */
-	static compare = (RA1: RecordArray, RA2: RecordArray, options) => {
-		// Assert RA1 is an Array
-		if (!(RA1 instanceof Array))
-			throw new TypeError("Parameter 1 must be Array or RecordArray");
-		// Assert RA2 is an Array
-		if (!(RA2 instanceof Array))
-			throw new TypeError("Parameter 2 must be Array or RecordArray");
-	
-		// Ensure there is an options object
-		if(!(options instanceof Object)){
-			// Check if boolean to become the strict option
-			if(options instanceof Boolean || typeof options == 'boolean')
-				// Convert options to object with boolean value as strict option.
-				options = {strict: options};
-			else
-				// Set options to new basic parameters object
-				options = {};
-		}
-	
-		// Force strict option to boolean
-		options.strict = !!options.strict;
-	
-		// Force identical option to boolean
-		options.identical = !!options.identical;
-	
-		// Compare Lengths of unique IDs.
-		if (options.strict && RA1.unique().length !== RA2.unique().length) return false;
-	
-		// Compare records
-		if (options.identical) {
-			if ( !RA1.every( ( record, index) =>
-				RecordArray.compareRecords(record, RA2[index], options.strict)
-			)) return false;
-		} else {
-			if ( !RA1.every(record =>
-				RecordArray.compareRecords(record, RA2.findOne("id", record.id), options.strict)
-			)) return false;
-		}
-	
-		return true;
-	};
-		
 
+	static compare(RA1: RecordArray, RA2: RecordArray, options?: any){
+		return compare(RA1, RA2, options)
+	}
 }
 
+export default RecordArray;
